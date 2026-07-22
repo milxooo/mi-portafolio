@@ -30,8 +30,8 @@
 
             --spacing-sm: 0.5rem;
             --spacing-md: 1rem;
-            --spacing-lg: 2rem;
-            --spacing-xl: 4rem;
+            --spacing-lg: clamp(1rem, 3vw, 2rem);
+            --spacing-xl: clamp(2rem, 6vw, 4rem);
         }
 
         /* RESET MÍNIMO Y RESTRICCIÓN DE BORDES REDONDEADOS */
@@ -145,7 +145,7 @@
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
             font-weight: 800;
             letter-spacing: -0.02em;
             margin-bottom: var(--spacing-xl);
@@ -182,8 +182,15 @@
          * con un tono morado muy oscuro para dar sensación de profundidad.
          */
         #inicio {
+            padding-top: 140px; /* Evita que el header fijo sobreponga el contenido en carga inicial */
             justify-content: center;
             align-items: flex-start;
+        }
+
+        @media (min-width: 768px) {
+            #inicio {
+                padding-top: 100px; /* Padding menor en pantallas grandes */
+            }
         }
 
         .hero-subtitle {
@@ -196,14 +203,14 @@
         }
 
         .hero-title {
-            font-size: clamp(3rem, 8vw, 5rem);
+            font-size: clamp(2rem, 6vw, 4.5rem);
             font-weight: 800;
             letter-spacing: -0.03em;
             margin-bottom: var(--spacing-md);
         }
 
         .hero-description {
-            font-size: 1.2rem;
+            font-size: clamp(0.95rem, 3vw, 1.15rem);
             color: var(--text-secondary);
             max-width: 600px;
             margin-bottom: var(--spacing-xl);
@@ -314,30 +321,46 @@
         }
 
         .contact-text {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             color: var(--text-secondary);
             font-weight: 300;
         }
 
         .social-links {
             display: flex;
-            flex-wrap: wrap;
             gap: var(--spacing-md);
+            width: 100%;
         }
 
         .social-links a {
-            padding: 1rem 2rem;
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem 0.5rem;
+            font-size: clamp(0.8rem, 2.5vw, 0.95rem);
             border: 1px solid var(--border-color);
             background-color: var(--bg-surface);
             font-weight: 600;
             letter-spacing: 0.05em;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .social-links a:hover {
             border-color: var(--accent-color);
             background-color: var(--accent-color);
             color: #fff;
+        }
+
+        @media (min-width: 768px) {
+            .social-links {
+                width: auto;
+            }
+
+            .social-links a {
+                flex: none;
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
         }
 
         /* FOOTER */
@@ -395,10 +418,6 @@
 
             nav ul {
                 gap: var(--spacing-md);
-            }
-
-            .section-title {
-                font-size: 2rem;
             }
         }
     </style>
