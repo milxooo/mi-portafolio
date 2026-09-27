@@ -1,0 +1,30 @@
+# Entorno de desarrollo y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Secretos y variables de entorno
+.env
+.env.*
+*.pem
+*.key
+*.cert
+
+# Dependencias y logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Archivos temporales y de compilacion
+coverage/
+.temp/
+.tmp/

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /css/
+Allow: /js/
+
+# Restringir scraping y crawling de documentos y artefactos
+Disallow: /assets/docs/
+Disallow: /projects/

@@ -4,6 +4,6 @@ registerProject({
     image: "repeating-linear-gradient(45deg, #181420, #181420 10px, #1e1929 10px, #1e1929 20px)",
     tech: ["Java", "Java Swing", "Maven", "MVC", "DAO", "DTO"],
     links: [
-        { label: "Ver PDF", url: "./Lorem%20Ipsum.pdf", type: "pdf" }
+        { label: "Ver PDF", url: "./assets/docs/sistema-de-gestion-doc.pdf", type: "pdf", download: "sistema-de-gestion-doc.pdf" }
     ]
 });

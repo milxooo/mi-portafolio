@@ -1,0 +1,102 @@
+name: Security & Quality Audit
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # Ejecutar escaneo preventivo semanal cada lunes a las 00:00 UTC
+    - cron: '0 0 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    name: Gitleaks Secret Detection
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  code-integrity-audit:
+    name: Code Integrity & Security Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check for Disallowed Tracked Files (.env, .vscode)
+        run: |
+          echo "Verificando ausencia de archivos sensibles en git..."
+          if git ls-files | grep -E '\.vscode|\.env|\.pem|\.key'; then
+            echo "ERROR: Se encontraron archivos sensibles o de configuracion local rastreados en git!"
+            exit 1
+          fi
+          echo "Check de archivos sensibles: OK"
+
+      - name: Validate HTML Markup & Security Headers
+        run: |
+          python3 -c "
+          from html.parser import HTMLParser
+
+          class Validator(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.tags = []
+                  self.errors = []
+              def handle_starttag(self, tag, attrs):
+                  if tag not in ['br', 'img', 'meta', 'link', 'input', 'hr', '!doctype']:
+                      self.tags.append(tag)
+              def handle_endtag(self, tag):
+                  if self.tags:
+                      last = self.tags.pop()
+                      if last != tag:
+                          self.errors.append(f'Mismatched tag: expected </{last}>, found </{tag}>')
+                  else:
+                      self.errors.append(f'Unexpected end tag: </{tag}>')
+
+          for page in ['index.html', '404.html']:
+              with open(page) as f:
+                  content = f.read()
+              p = Validator()
+              p.feed(content)
+              if p.errors or p.tags:
+                  print(f'Error en {page}:', p.errors, p.tags)
+                  exit(1)
+              if 'Content-Security-Policy' not in content:
+                  print(f'Falta Content-Security-Policy en {page}')
+                  exit(1)
+          print('HTML y CSP validados exitosamente.')
+          "
+
+      - name: Validate PDF Hygiene (No metadata leaks)
+        run: |
+          python3 -c "
+          import os, re
+          docs_dir = 'assets/docs'
+          if os.path.exists(docs_dir):
+              for f in os.listdir(docs_dir):
+                  if f.endswith('.pdf'):
+                      path = os.path.join(docs_dir, f)
+                      with open(path, 'rb') as pdf:
+                          c = pdf.read()
+                      leaks = re.findall(rb'/(Author|Creator|Producer|CreationDate)\s*(\([^\)]*\)|<[^>]*>)', c)
+                      if leaks:
+                          print(f'ERROR: Metadatos detectados en {path}: {leaks}')
+                          exit(1)
+          print('PDFs auditados sin fugas de metadatos.')
+          "
