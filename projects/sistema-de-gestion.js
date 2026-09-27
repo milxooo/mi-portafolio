@@ -2,7 +2,7 @@
     (window.projectsRegistry = window.projectsRegistry || []).push(project);
 })({
     title: "Sistema de Gestion",
-    desc: "Aplicación de escritorio desarrollada en Java para gestionar de forma centralizada la operación de un taller de reparación de computadores. La solución integra en un mismo sistema la gestión de inventario y repuestos, proveedores, técnicos, compras, órdenes de servicio y ventas a clientes, permitiendo mantener un mayor control sobre los recursos y el flujo de trabajo del negocio. Su arquitectura modular y su interfaz gráfica facilitan la administración de las diferentes áreas, mientras que la persistencia local permite conservar la información y actualizar automáticamente el inventario a partir de compras, ventas y servicios realizados.",
+    desc: "Aplicación de escritorio desarrollada en Java para gestionar de forma centralizada la operación de un taller de reparación. La solución integra en un mismo sistema la gestión de inventario y repuestos, proveedores, técnicos, compras, órdenes de servicio y ventas a clientes. La persistencia local permite conservar la información y actualizar automáticamente el inventario a partir de compras, ventas y servicios realizados.",
     image: "repeating-linear-gradient(45deg, #181420, #181420 10px, #1e1929 10px, #1e1929 20px)",
     tech: ["Java", "Java Swing", "AWT", "Maven", "NetBeans GUI Builder", "MVC", "DAO", "DTO", "Modularidad", "Patrones de Diseño", "Gestion de Eventos", "Serializacion"],
     links: [
