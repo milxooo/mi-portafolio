@@ -4,9 +4,10 @@
   "private": true,
   "description": "Portafolio profesional de Julian Forero",
   "scripts": {
-    "test": "python3 scripts/security-check.py",
+    "test": "python3 -m unittest discover -s scripts -p 'test_*.py' && python3 scripts/security-check.py && node --test scripts/agregar.test.js",
     "security-check": "python3 scripts/security-check.py",
-    "audit": "python3 scripts/security-check.py"
+    "audit": "python3 scripts/security-check.py",
+    "agregar": "node scripts/agregar.js"
   },
   "keywords": [
     "portfolio",
@@ -14,5 +15,6 @@
     "vanilla-js"
   ],
   "author": "Julian Forero",
-  "license": "MIT"
+  "license": "MIT",
+  "engines": { "node": ">=18" }
 }

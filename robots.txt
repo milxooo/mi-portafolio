@@ -1,9 +1,4 @@
+# robots.txt solo orienta a rastreadores cooperativos; NO es control de acceso.
+# Todo lo publicado en este sitio es publico.
 User-agent: *
 Allow: /
-Allow: /index.html
-Allow: /css/
-Allow: /js/
-
-# Restringir scraping y crawling de documentos y artefactos
-Disallow: /assets/docs/
-Disallow: /projects/

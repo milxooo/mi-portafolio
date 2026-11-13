@@ -8,16 +8,10 @@
 
     <!-- Hardening: Cabeceras de Seguridad y Politicas de Origen -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'none'; form-action 'none'; base-uri 'self';">
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; form-action 'none'; base-uri 'self';">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
     <title>Julian | Portafolio</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <!-- Hoja de Estilos Externa -->
     <link rel="stylesheet" href="css/styles.css">
@@ -33,6 +27,7 @@
                 <ul>
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#proyectos">Proyectos</a></li>
+                    <li id="nav-certs" hidden><a href="#certificaciones">Certificaciones</a></li>
                     <li><a href="#contacto">Contacto</a></li>
                 </ul>
             </nav>
@@ -69,6 +64,13 @@
             </div>
         </section>
 
+        <!-- Seccion de Certificaciones (se muestra solo si hay datos) -->
+        <section id="certificaciones" class="container" hidden>
+            <h2 class="section-title">Certificaciones</h2>
+            <div class="projects-grid" id="certs-grid">
+            </div>
+        </section>
+
         <!-- Seccion de Contacto -->
         <section id="contacto" class="container">
             <h2 class="section-title">Contacto</h2>
@@ -95,9 +97,10 @@
         </div>
     </footer>
 
-    <!-- Logica Principal y Registro de Proyectos -->
+    <!-- Datos (generados por `npm run agregar`) y Logica Principal -->
+    <script src="data/proyectos.js"></script>
+    <script src="data/certificaciones.js"></script>
     <script src="js/main.js"></script>
-    <script src="projects/sistema-de-gestion.js"></script>
 </body>
 
 </html>

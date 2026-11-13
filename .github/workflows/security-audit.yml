@@ -18,12 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -32,10 +32,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: '3.11'
 
@@ -48,55 +48,5 @@ jobs:
           fi
           echo "Check de archivos sensibles: OK"
 
-      - name: Validate HTML Markup & Security Headers
-        run: |
-          python3 -c "
-          from html.parser import HTMLParser
-
-          class Validator(HTMLParser):
-              def __init__(self):
-                  super().__init__()
-                  self.tags = []
-                  self.errors = []
-              def handle_starttag(self, tag, attrs):
-                  if tag not in ['br', 'img', 'meta', 'link', 'input', 'hr', '!doctype']:
-                      self.tags.append(tag)
-              def handle_endtag(self, tag):
-                  if self.tags:
-                      last = self.tags.pop()
-                      if last != tag:
-                          self.errors.append(f'Mismatched tag: expected </{last}>, found </{tag}>')
-                  else:
-                      self.errors.append(f'Unexpected end tag: </{tag}>')
-
-          for page in ['index.html', '404.html']:
-              with open(page) as f:
-                  content = f.read()
-              p = Validator()
-              p.feed(content)
-              if p.errors or p.tags:
-                  print(f'Error en {page}:', p.errors, p.tags)
-                  exit(1)
-              if 'Content-Security-Policy' not in content:
-                  print(f'Falta Content-Security-Policy en {page}')
-                  exit(1)
-          print('HTML y CSP validados exitosamente.')
-          "
-
-      - name: Validate PDF Hygiene (No metadata leaks)
-        run: |
-          python3 -c "
-          import os, re
-          docs_dir = 'assets/docs'
-          if os.path.exists(docs_dir):
-              for f in os.listdir(docs_dir):
-                  if f.endswith('.pdf'):
-                      path = os.path.join(docs_dir, f)
-                      with open(path, 'rb') as pdf:
-                          c = pdf.read()
-                      leaks = re.findall(rb'/(Author|Creator|Producer|CreationDate)\s*(\([^\)]*\)|<[^>]*>)', c)
-                      if leaks:
-                          print(f'ERROR: Metadatos detectados en {path}: {leaks}')
-                          exit(1)
-          print('PDFs auditados sin fugas de metadatos.')
-          "
+      - name: Run test suite (npm test)
+        run: npm test
